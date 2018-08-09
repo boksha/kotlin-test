@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KotlinTest</string>
+    <string name="geofence">geofence</string>
+    <string name="connectivity">connectivity</string>
+    <string name="activity">activity</string>
+    <string name="activity_title">List Of Activities</string>
+    <string name="geofence_title">List of Geofence Events</string>
+    <string name="connectivity_title">List of Connectivity events</string>
+</resources>
