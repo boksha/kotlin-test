@@ -3,13 +3,13 @@ package com.example.miodragmilosevic.kotlintest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.support.annotation.NonNull
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_nav.*
 
 
@@ -19,34 +19,34 @@ class NavActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
-        navigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.drawer_activity -> {
-                    Log.i("Miki", "activity")
-                    val fragment = ActivityFragment.Companion.newInstance()
-                    addFragment(fragment)
-                    true
-                }
-                R.id.drawer_connectivity -> {
-                    Log.i("Miki", "connectivity")
-                    val fragment = ConnectivityFragment.Companion.newInstance()
-                    addFragment(fragment)
-                    true
-                }
-                R.id.drawer_geofence -> {
-                    Log.i("Miki", "geofence")
-                    val fragment = GeofenceFragment.Companion.newInstance()
-                    addFragment(fragment)
-                    true
-                }
-                else -> {
-                    Log.i("Miki", "something else")
-                    false
-
-                }
-
-            }
-        }
+//        navigation.setOnNavigationItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.drawer_activity -> {
+//                    Log.i("Miki", "activity")
+//                    val fragment = ActivityFragment.Companion.newInstance()
+//                    addFragment(fragment)
+//                    true
+//                }
+//                R.id.drawer_connectivity -> {
+//                    Log.i("Miki", "connectivity")
+//                    val fragment = ConnectivityFragment.Companion.newInstance()
+//                    addFragment(fragment)
+//                    true
+//                }
+//                R.id.drawer_geofence -> {
+//                    Log.i("Miki", "geofence")
+//                    val fragment = GeofenceFragment.Companion.newInstance()
+//                    addFragment(fragment)
+//                    true
+//                }
+//                else -> {
+//                    Log.i("Miki", "something else")
+//                    false
+//
+//                }
+//
+//            }
+//        }
         val fragment = ActivityFragment.Companion.newInstance()
         addFragment(fragment)
         startServiceIntent = Intent(this,ForegroundService::class.java)
