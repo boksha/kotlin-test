@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_nav.*
 
 
 class NavActivity : AppCompatActivity() {
+
     private lateinit var startServiceIntent : Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {

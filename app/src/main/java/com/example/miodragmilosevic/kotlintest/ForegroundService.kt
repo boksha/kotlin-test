@@ -5,20 +5,38 @@ import android.content.Intent
 import android.os.*
 import android.widget.Toast
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.example.miodragmilosevic.kotlintest.activityrecognition.ActivityRecognitionHandler
+import com.example.miodragmilosevic.kotlintest.activityrecognition.ActivityRecognitionManager
+import com.example.miodragmilosevic.kotlintest.connectivity.ConnectivityBroadcastReceiver
+import com.example.miodragmilosevic.kotlintest.connectivity.ConnectivityHandler
+import com.example.miodragmilosevic.kotlintest.connectivity.MyConnectivityManager
+
+
+
 
 
 class ForegroundService : Service() {
-
-    private lateinit var serviceLooper: Looper
-
-    //    private lateinit var mServiceHandler: ServiceHandler
-    private lateinit var thread: HandlerThread
-//    // Handler that receives messages from the thread
-
+    
+    companion object {
+        const val ACTION_CONNECTIVITY = "om.example.miodragmilosevic.kotlintest.ACTION_CONNECTIVITY"
+        const val ACTION_ACTIVITY_RECOGNITION = "om.example.miodragmilosevic.kotlintest.ACTION_ACTIVITY_RECOGNITION"
+        const val ACTION_GEOFENCING = "om.example.miodragmilosevic.kotlintest.ACTION_GEOFENCING"
+    }
     private val CHANNEL_ID = "sampleAppChanell"
     private val ONGOING_NOTIFICATION_ID = 100
+
+    private lateinit var serviceLooper: Looper
+    private lateinit var serviceHandler: ServiceHandler
+    private lateinit var thread: HandlerThread
+    private lateinit var connectivityHandler : ConnectivityHandler
+    private lateinit var activityRecognitionHandler : ActivityRecognitionHandler
+//    private lateinit var geofencingHandler : GeofencingHandler
+    private lateinit var myConnectivityManager : MyConnectivityManager
+    private lateinit var activityRecognitionManager : ActivityRecognitionManager
+//    private lateinit var geofencingManager : GeofencingManager
 
 
     override fun onCreate() {
@@ -28,9 +46,14 @@ class ForegroundService : Service() {
 
         // Get the HandlerThread's Looper and use it for our Handler
         serviceLooper = thread.getLooper();
-//        mServiceHandler = ServiceHandler(serviceLooper);
+        serviceHandler = ServiceHandler(serviceLooper);
+        myConnectivityManager = MyConnectivityManager(application, ConnectivityBroadcastReceiver())
+        connectivityHandler = ConnectivityHandler(application)
+        myConnectivityManager.start()
 
-
+        activityRecognitionHandler = ActivityRecognitionHandler()
+        activityRecognitionManager = ActivityRecognitionManager()
+        activityRecognitionManager.start()
 
 
         // Android O requires a Notification Channel.
@@ -50,10 +73,19 @@ class ForegroundService : Service() {
         startForeground(ONGOING_NOTIFICATION_ID, getNotification());
     }
 
-    class ServiceHandler() : Handler() {
+    inner class ServiceHandler(looper:Looper) : Handler(looper) {
 
         override fun handleMessage(msg: Message?) {
-
+            val intent = msg?.obj
+            if (intent is Intent){
+                Log.i("Miki","handleMessage ")
+                val action = intent.action
+                when(action){
+                    ACTION_CONNECTIVITY -> connectivityHandler.handleIntent(intent)
+                    ACTION_ACTIVITY_RECOGNITION -> activityRecognitionHandler.handleIntent(intent)
+                    else -> Log.i("Miki","Irelevant action")
+                }
+            }
 
         }
 
@@ -64,9 +96,14 @@ class ForegroundService : Service() {
 
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
-//        val msg = mServiceHandler.obtainMessage();
-//        msg.arg1 = startId;
-//        mServiceHandler.sendMessage(msg);
+        val action : String? = intent?.action
+        if (action != null){
+            val msg = serviceHandler.obtainMessage();
+            msg.obj = intent;
+            msg.what = startId
+            serviceHandler.sendMessage(msg);
+        }
+
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
@@ -74,7 +111,9 @@ class ForegroundService : Service() {
 
     override fun onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
-//        mServiceHandler.removeCallbacksAndMessages(null)
+        myConnectivityManager.stop()
+        activityRecognitionManager.stop()
+        serviceHandler.removeCallbacksAndMessages(null)
         thread.quit()
         super.onDestroy()
     }
