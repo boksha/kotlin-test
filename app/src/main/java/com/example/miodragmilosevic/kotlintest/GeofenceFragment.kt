@@ -25,7 +25,7 @@ class GeofenceFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var rootView = inflater!!.inflate(R.layout.fragment_activity, container, false)
+        var rootView = inflater.inflate(R.layout.fragment_activity, container, false)
         val activity_title = rootView.findViewById<TextView>(R.id.activity_title)
         activity_title.text = getString(R.string.geofence_title)
         return rootView

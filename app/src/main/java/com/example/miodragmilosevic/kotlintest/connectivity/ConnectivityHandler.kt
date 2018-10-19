@@ -16,7 +16,7 @@ class ConnectivityHandler(val context : Context) {
         val isMobile: Boolean = activeNetwork?.type == ConnectivityManager.TYPE_MOBILE
         Log.i("Miki","ConnectivityHandler handleIntent wifi : $isWiFi mobile : $isMobile is connected : $isConnected" )
 
-        TODO("update changes to room")
+//        TODO("update changes to room")
 
     }
 }

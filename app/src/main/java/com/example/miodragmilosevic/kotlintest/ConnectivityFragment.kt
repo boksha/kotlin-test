@@ -16,8 +16,8 @@ class ConnectivityFragment  : Fragment() {
      */
     companion object {
         fun newInstance(): ConnectivityFragment {
-            var connectivityFragment = ConnectivityFragment()
-            var args = Bundle()
+            val connectivityFragment = ConnectivityFragment()
+            val args = Bundle()
             connectivityFragment.arguments = args
             return connectivityFragment
         }
@@ -25,7 +25,7 @@ class ConnectivityFragment  : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var rootView = inflater!!.inflate(R.layout.fragment_activity, container, false)
+        var rootView = inflater.inflate(R.layout.fragment_activity, container, false)
         val activity_title = rootView.findViewById<TextView>(R.id.activity_title)
         activity_title.text = getString(R.string.connectivity_title)
         return rootView

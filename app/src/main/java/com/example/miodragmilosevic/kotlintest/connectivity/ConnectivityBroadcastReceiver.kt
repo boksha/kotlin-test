@@ -14,6 +14,7 @@ class ConnectivityBroadcastReceiver : BroadcastReceiver() {
         val intent = Intent(context, ForegroundService::class.java)
         intent.action = ACTION_CONNECTIVITY
         if (context != null) {
+            //create extension for example
             ContextCompat.startForegroundService(context, intent)
         }
     }
